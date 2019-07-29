@@ -2,6 +2,8 @@ package com.example.demo.controller;
 
 import com.alibaba.druid.util.StringUtils;
 import com.example.demo.BlogProperties;
+import com.example.demo.bean.User;
+import com.example.demo.common.ServiceResult;
 import com.example.demo.mapper.UserMapper;
 import com.example.demo.service.RedisService;
 import io.swagger.annotations.ApiOperation;
@@ -26,10 +28,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 public class TestController {
@@ -66,6 +65,18 @@ public class TestController {
     public String reids() {
         redisService.setString("my1","20171213");
         return redisService.getString("my1");
+    }
+
+    @ApiOperation(value = "整合redisList", notes = "整合redisList")
+    @RequestMapping(value = "/redisList", method = RequestMethod.GET)
+    public ServiceResult redisList() {
+        ServiceResult serviceResult = new ServiceResult();
+        List userList = Arrays.asList(new User("张三",18,1)
+                ,new User("李四",20,1));
+        redisService.setList("listTest", userList);
+        List<User> listTest = redisService.getList("listTest");
+        serviceResult.setData(listTest);
+        return serviceResult;
     }
 
     @GetMapping("/order/getById/{id}")
