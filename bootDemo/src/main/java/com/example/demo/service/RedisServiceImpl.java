@@ -17,7 +17,7 @@ import java.util.Map;
  */
 @Service
 public class RedisServiceImpl implements RedisService {
-    private static final String VIRTUAL_COURSE_PREX = "lc_vc_";
+    private static final String VIRTUAL_COURSE_PREX = "";
     @Autowired
     private RedisUtil redisUtil;
 

@@ -6,6 +6,7 @@ import com.example.demo.bean.User;
 import com.example.demo.common.ServiceResult;
 import com.example.demo.mapper.UserMapper;
 import com.example.demo.service.RedisService;
+import com.example.demo.util.RedisUtil;
 import io.swagger.annotations.ApiOperation;
 import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.get.GetResponse;
@@ -25,6 +26,7 @@ import org.elasticsearch.search.query.QuerySearchRequest;
 import org.elasticsearch.transport.InboundMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import redis.clients.jedis.Jedis;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -41,6 +43,9 @@ public class TestController {
 
     @Autowired
     private RedisService redisService;
+
+    @Autowired
+    private RedisUtil redisUtil;
 
 
     @Autowired
@@ -71,11 +76,21 @@ public class TestController {
     @RequestMapping(value = "/redisList", method = RequestMethod.GET)
     public ServiceResult redisList() {
         ServiceResult serviceResult = new ServiceResult();
+        List<User> listTest = redisService.getList("listTest");
+        serviceResult.setData(listTest);
+        return serviceResult;
+    }
+
+    @ApiOperation(value = "整合addList", notes = "整合redisList")
+    @RequestMapping(value = "/addsList", method = RequestMethod.GET)
+    public ServiceResult addsList() {
+        ServiceResult serviceResult = new ServiceResult();
         List userList = Arrays.asList(new User("张三",18,1)
                 ,new User("李四",20,1));
         redisService.setList("listTest", userList);
-        List<User> listTest = redisService.getList("listTest");
-        serviceResult.setData(listTest);
+
+        Jedis jedis = redisUtil.getJedis();
+        jedis.expire("listTest", 10);
         return serviceResult;
     }
 
