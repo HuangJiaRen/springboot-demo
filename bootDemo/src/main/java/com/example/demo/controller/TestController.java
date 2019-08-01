@@ -57,7 +57,7 @@ public class TestController {
     @Autowired
     private UserService userService;
 
-    @ApiOperation(value="第一个接口", notes="hello接口")
+    @ApiOperation(value="swagger第一个接口", notes="hello接口")
     @RequestMapping(value = "/hello", method = RequestMethod.POST)
     public String hello(){
         System.out.println(blogProperties.getTile());
@@ -79,7 +79,7 @@ public class TestController {
     }
 
     @ApiOperation(value = "整合redisList", notes = "整合redisList")
-    @RequestMapping(value = "/redisList", method = RequestMethod.GET)
+    @RequestMapping(value = "/getRedisList", method = RequestMethod.GET)
     public ServiceResult redisList() {
         ServiceResult serviceResult = new ServiceResult();
         List<User> listTest = redisService.getList("listTest");
@@ -88,7 +88,7 @@ public class TestController {
     }
 
     @ApiOperation(value = "整合addList", notes = "整合redisList")
-    @RequestMapping(value = "/addsList", method = RequestMethod.GET)
+    @RequestMapping(value = "/addRedisList", method = RequestMethod.GET)
     public ServiceResult addsList() {
         ServiceResult serviceResult = new ServiceResult();
         List userList = Arrays.asList(new User("张三",18,1)
@@ -123,7 +123,7 @@ public class TestController {
     }
 
     /**
-     * 取出mongo所有所有用户
+     * 增加mongo用户
      */
     @ApiOperation(value = "整合mongodb", notes = "整合mongodb")
     @GetMapping("addMgUser")
