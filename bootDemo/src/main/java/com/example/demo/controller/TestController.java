@@ -2,9 +2,11 @@ package com.example.demo.controller;
 
 import com.alibaba.druid.util.StringUtils;
 import com.example.demo.BlogProperties;
+import com.example.demo.bean.MongoUser;
 import com.example.demo.bean.User;
 import com.example.demo.common.ServiceResult;
 import com.example.demo.mapper.UserMapper;
+import com.example.demo.mgservice.UserService;
 import com.example.demo.service.RedisService;
 import com.example.demo.util.RedisUtil;
 import io.swagger.annotations.ApiOperation;
@@ -25,6 +27,7 @@ import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.query.QuerySearchRequest;
 import org.elasticsearch.transport.InboundMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.web.bind.annotation.*;
 import redis.clients.jedis.Jedis;
 
@@ -50,6 +53,9 @@ public class TestController {
 
     @Autowired
     private RestHighLevelClient restHighLevelClient;
+
+    @Autowired
+    private UserService userService;
 
     @ApiOperation(value="第一个接口", notes="hello接口")
     @RequestMapping(value = "/hello", method = RequestMethod.POST)
@@ -114,6 +120,26 @@ public class TestController {
         return map;
 
 
+    }
+
+    /**
+     * 取出mongo所有所有用户
+     */
+    @ApiOperation(value = "整合mongodb", notes = "整合mongodb")
+    @GetMapping("addMgUser")
+    public void addMgUser() {
+        MongoUser mongoUser = new MongoUser("张思", 22, 1);
+        userService.saveUser(mongoUser);
+    }
+
+    /**
+     * 取出mongo所有所有用户
+     */
+    @ApiOperation(value = "整合mongodb", notes = "整合mongodb")
+    @GetMapping("getMongoUsers")
+    public List<MongoUser> getMongoUser() {
+        List<MongoUser> user = userService.getUsers();
+        return user;
     }
 
 //    @GetMapping("/order/termQuery/{id}")
