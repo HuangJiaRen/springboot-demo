@@ -88,7 +88,7 @@ public class TestController {
     }
 
     @ApiOperation(value = "整合addList", notes = "整合redisList")
-    @RequestMapping(value = "/addRedisList", method = RequestMethod.GET)
+    @RequestMapping(value = "/addRedisList", method = RequestMethod.POST)
     public ServiceResult addsList() {
         ServiceResult serviceResult = new ServiceResult();
         List userList = Arrays.asList(new User("张三",18,1)
@@ -126,7 +126,7 @@ public class TestController {
      * 增加mongo用户
      */
     @ApiOperation(value = "整合mongodb", notes = "整合mongodb")
-    @GetMapping("addMgUser")
+    @PostMapping("addMgUser")
     public void addMgUser() {
         MongoUser mongoUser = new MongoUser("张思", 22, 1);
         userService.saveUser(mongoUser);
