@@ -30,6 +30,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.web.bind.annotation.*;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.Transaction;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -87,7 +89,7 @@ public class TestController {
         return serviceResult;
     }
 
-    @ApiOperation(value = "整合addList", notes = "整合redisList")
+    @ApiOperation(value = "整合redis的过期时间", notes = "整合redis的过期时间")
     @RequestMapping(value = "/addRedisList", method = RequestMethod.POST)
     public ServiceResult addsList() {
         ServiceResult serviceResult = new ServiceResult();
@@ -97,6 +99,48 @@ public class TestController {
 
         Jedis jedis = redisUtil.getJedis();
         jedis.expire("listTest", 10);
+        return serviceResult;
+    }
+
+    @ApiOperation(value = "整合redis的事务", notes = "整合redis的事务")
+    @RequestMapping(value = "/testRedisTran", method = RequestMethod.POST)
+    public ServiceResult testRedisTran() {
+        ServiceResult serviceResult = new ServiceResult();
+
+        //开启事务
+        Jedis jedis = redisUtil.getJedis();
+        Transaction transtacTion = jedis.multi();
+        //执行事务内的redis命令
+        transtacTion.set("tran1", "hello");
+        transtacTion.set("tran2", "world");
+        //提交事务
+        List<Object> exec = transtacTion.exec();
+        //事务中每条命令的执行结果
+        serviceResult.setData(exec);
+        return serviceResult;
+    }
+
+    @ApiOperation(value = "整合redis的事务watch", notes = "整合redis的事务")
+    @RequestMapping(value = "/testRedisWatch", method = RequestMethod.POST)
+    public ServiceResult testRedisTran2() {
+        ServiceResult serviceResult = new ServiceResult();
+
+        JedisPool jedisPool = new JedisPool("49.234.238.59");
+        Jedis jedis = jedisPool.getResource();
+        // 设定 nowatch 的初始值为 hello
+        jedis.set("watchtest","hello");
+        // 使用 watch 命令watch "watchtest"
+        jedis.watch("watchtest");
+        //开启事务
+        Transaction multi = jedis.multi();
+        //另外一个jedis客户端对watchtest进行append操作
+        jedisPool.getResource().append("watchtest", " xxx");
+        // 事务内部对watchtest进行append操作
+        multi.append("watchtest", " world");
+        //提交事务
+        multi.exec();
+
+        serviceResult.setData(jedis.get("watchtest"));
         return serviceResult;
     }
 
