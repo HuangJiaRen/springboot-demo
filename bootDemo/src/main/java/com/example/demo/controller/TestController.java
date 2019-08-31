@@ -5,29 +5,35 @@ import com.example.demo.BlogProperties;
 import com.example.demo.bean.MongoUser;
 import com.example.demo.bean.User;
 import com.example.demo.common.ServiceResult;
+import com.example.demo.config.EsConfig;
 import com.example.demo.mapper.UserMapper;
 import com.example.demo.mgservice.UserService;
+import com.example.demo.pojo.ElasticsearchQuery;
 import com.example.demo.service.RedisService;
 import com.example.demo.util.RedisUtil;
 import io.swagger.annotations.ApiOperation;
+import org.elasticsearch.action.delete.DeleteRequest;
+import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.client.Request;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
-import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.index.query.RangeQueryBuilder;
+import org.elasticsearch.index.query.*;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.query.QuerySearchRequest;
+import org.elasticsearch.search.sort.SortBuilder;
+import org.elasticsearch.search.sort.SortBuilders;
+import org.elasticsearch.search.sort.SortOrder;
 import org.elasticsearch.transport.InboundMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -144,9 +150,10 @@ public class TestController {
         return serviceResult;
     }
 
+    @ApiOperation(value = "整合es-7.1.1", notes = "整合es-7.1.1")
     @GetMapping("/order/getById/{id}")
     public Map<String,Object> getOrder(@PathVariable("id")String id){
-        GetRequest getRequest=new GetRequest("logs-beat45-2019.06.28","_doc",id);
+        GetRequest getRequest=new GetRequest("logs-client-2019.08.12","_doc",id);
         Map map=new HashMap();
         GetResponse response=null;
         try{
@@ -186,38 +193,76 @@ public class TestController {
         return user;
     }
 
-//    @GetMapping("/order/termQuery/{id}")
-//    public Map<String,Object> termQuery(@PathVariable("id")String id){
-//        BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();
-//        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-//        searchSourceBuilder.from(0);
-//        searchSourceBuilder.size(10000);
-//        QueryBuilder queryBuilder = QueryBuilders.termQuery("CHATROOM_CODE",req.getChatroomCode());
-//        if (StringUtils.isEmpty(req.getKeyWord())){
-//            moreLikeThisQuery = QueryBuilders.matchPhraseQuery("TXT",req.getKeyWord());
-//            boolQueryBuilder.must(moreLikeThisQuery);
-//        }
-//        RangeQueryBuilder rangeQueryBuilder = QueryBuilders.rangeQuery("FIRST_UPDATETIME");
+    @ApiOperation(value = "整合es-7.1.1", notes = "整合es-7.1.1")
+    @GetMapping("/order/termQuery")
+    public ServiceResult termQuery(ElasticsearchQuery req) throws IOException {
+        ServiceResult serviceResult = new ServiceResult();
+        BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        //分页
+        searchSourceBuilder.from(0);
+        searchSourceBuilder.size(10000);
+        //排序
+        searchSourceBuilder.sort(SortBuilders.fieldSort("@timestamp").order(SortOrder.DESC));
+//        QueryBuilder queryBuilder = QueryBuilders.termQuery("id",req.getId());
+        if (StringUtils.isEmpty(req.getKeyWord())){
+            MatchPhraseQueryBuilder moreLikeThisQuery = QueryBuilders.matchPhraseQuery("message",req.getKeyWord());
+            boolQueryBuilder.must(moreLikeThisQuery);
+        }
+//        RangeQueryBuilder rangeQueryBuilder = QueryBuilders.rangeQuery("timestamp");
 //        rangeQueryBuilder.gte(req.getFirstTime());
 //        rangeQueryBuilder.lte(req.getLastTime());
 //        boolQueryBuilder.must(queryBuilder);
 //        boolQueryBuilder.must(rangeQueryBuilder);
-//        searchSourceBuilder.query(boolQueryBuilder);
-//        SearchRequest searchRequest = new SearchRequest(chatRoomIndex);
-//        searchRequest.routing(chatRoomType);
-//        searchRequest.source(searchSourceBuilder);
-//        SearchResponse response = restHighLevelClient.search(searchRequest,RequestOptions.DEFAULT);
-//        SearchHits hits = response.getHits();
-//        SearchHit[] searchHits = hits.getHits();
-//        List<Object> list = new ArrayList<>();
-//        if (searchHits.length > 0){
-//            for (SearchHit hit : searchHits) {
-//                list.add(hit.getSourceAsMap()) ;
-//            }
-//        }
-//        return  rr.returnSuccessResult(list,requestReport);
-//
-//    }
+        searchSourceBuilder.query(boolQueryBuilder);
+        SearchRequest searchRequest = new SearchRequest(req.getChatRoomIndex());
+        searchRequest.routing(req.getChatRoomType());
+        searchRequest.source(searchSourceBuilder);
+        SearchResponse response = restHighLevelClient.search(searchRequest,RequestOptions.DEFAULT);
+        SearchHits hits = response.getHits();
+        SearchHit[] searchHits = hits.getHits();
+        List<Object> list = new ArrayList<>();
+        if (searchHits.length > 0){
+            for (SearchHit hit : searchHits) {
+                list.add(hit.getSourceAsMap()) ;
+            }
+        }
 
+        serviceResult.setData(list);
+
+        return serviceResult;
+
+    }
+
+    @ApiOperation(value = "整合es-7.1.1的update方法", notes = "整合es-7.1.1的update方法")
+    @PostMapping("/order/update/")
+    public String update(ElasticsearchQuery req) throws IOException {
+        UpdateRequest request=new UpdateRequest(req.getChatRoomIndex(),req.getId());
+        Map<String,Object> temp=new HashMap<>();
+        if(!ObjectUtils.isEmpty(req.getKeyWord())){
+            temp.put("message",req.getKeyWord());
+        }
+
+        if(!ObjectUtils.isEmpty(req.getPath())){
+            temp.put("path",req.getPath());
+        }
+
+        request.doc(temp);
+
+        return restHighLevelClient.update(request,RequestOptions.DEFAULT).status().name();
+
+    }
+
+    @DeleteMapping("/order/delete/{id}")
+    public String deleteOrder(@PathVariable("id") String id) {
+        DeleteRequest request = new DeleteRequest("logs-client-2019.08.12", id);
+        try {
+            DeleteResponse response = restHighLevelClient.delete(request, RequestOptions.DEFAULT);
+            return response.status().name();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 }
