@@ -50,11 +50,11 @@ public class KafkaController {
     /**
      * 消费者使用日志打印消息
      */
-    @KafkaListener(topics = "my_test")
-    public void receive(ConsumerRecord<?, ?> consumer) {
-        System.out.println("topic名称:" + consumer.topic()
-                + ",key:" + consumer.key() + ",分区位置:" + consumer.partition()
-                + ", 下标" + consumer.offset());
-    }
+//    @KafkaListener(topics = "my_test")
+//    public void receive(ConsumerRecord<?, ?> consumer) {
+//        System.out.println("topic名称:" + consumer.topic()
+//                + ",key:" + consumer.key() + ",分区位置:" + consumer.partition()
+//                + ", 下标" + consumer.offset());
+//    }
 
 }
