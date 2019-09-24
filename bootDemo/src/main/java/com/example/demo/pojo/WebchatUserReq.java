@@ -12,5 +12,5 @@ public class WebchatUserReq {
 	String sessionKey;
 	String openId;
 	String schoolId;
-
+    String accessToken;
 }

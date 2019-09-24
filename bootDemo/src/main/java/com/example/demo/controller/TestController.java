@@ -9,6 +9,7 @@ import com.example.demo.config.EsConfig;
 import com.example.demo.mapper.UserMapper;
 import com.example.demo.mgservice.UserService;
 import com.example.demo.pojo.ElasticsearchQuery;
+import com.example.demo.req.VcodeReq;
 import com.example.demo.service.RedisService;
 import com.example.demo.util.RedisUtil;
 import io.swagger.annotations.ApiOperation;
@@ -40,6 +41,7 @@ import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.Transaction;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.*;
 
@@ -265,4 +267,17 @@ public class TestController {
         return null;
     }
 
+
+    /**
+     * 获取图形验证码
+     *
+     * @param vcodeReq
+     * @return
+     * @throws Exception
+     */
+    @PostMapping(value = "/getImgCode")
+    @ResponseBody
+    public ServiceResult getImgCode(@RequestBody VcodeReq vcodeReq, HttpServletRequest req, HttpServletResponse resp) throws Exception {
+        return userService.getImgCode(vcodeReq, req, resp);
+    }
 }
