@@ -1,6 +1,7 @@
 package com.example.demo.mgservice;
 
 import com.example.demo.bean.MongoUser;
+import com.example.demo.common.ServiceResult;
 
 import java.util.List;
 
@@ -13,4 +14,6 @@ import java.util.List;
 public interface UserService {
     public void saveUser(MongoUser user);
     public List<MongoUser> getUsers();
+
+    ServiceResult getTokenCode();
 }
