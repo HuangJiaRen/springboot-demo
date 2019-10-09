@@ -5,6 +5,7 @@ import com.example.demo.BlogProperties;
 import com.example.demo.bean.MongoUser;
 import com.example.demo.bean.User;
 import com.example.demo.common.ServiceResult;
+import com.example.demo.config.BussinessConstants;
 import com.example.demo.config.EsConfig;
 import com.example.demo.mapper.UserMapper;
 import com.example.demo.mgservice.UserService;
@@ -34,6 +35,7 @@ import org.elasticsearch.search.sort.SortOrder;
 import org.elasticsearch.transport.InboundMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 import redis.clients.jedis.Jedis;
@@ -66,6 +68,7 @@ public class TestController {
 
     @Autowired
     private UserService userService;
+
 
     @ApiOperation(value="swagger第一个接口", notes="hello接口")
     @RequestMapping(value = "/hello", method = RequestMethod.POST)
@@ -107,6 +110,18 @@ public class TestController {
 
         Jedis jedis = redisUtil.getJedis();
         jedis.expire("listTest", 10);
+
+        jedis.incr(BussinessConstants.CODE_COUNT_REDIS_KEY_PRE);
+        return serviceResult;
+    }
+
+    @ApiOperation(value = "整合redis的自增方法", notes = "整合redis的自增方法")
+    @RequestMapping(value = "/addRedisIncreValue", method = RequestMethod.POST)
+    public ServiceResult addRedisIncreValue() {
+        ServiceResult serviceResult = new ServiceResult();
+        Jedis jedis = redisUtil.getJedis();
+        jedis.incr(BussinessConstants.CODE_COUNT_REDIS_KEY_PRE);
+        String a = jedis.get(BussinessConstants.CODE_COUNT_REDIS_KEY_PRE);
         return serviceResult;
     }
 
