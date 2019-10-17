@@ -15,10 +15,10 @@ public class WebchatMaintenance implements Serializable {
     private String templateId;
 
     private String schoolId;
-   private String mchId;
-private String payKey;
+    private String mchId;
+    private String payKey;
 
-private String city;
+    private String city;
 
 
 }

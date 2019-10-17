@@ -19,14 +19,13 @@ import java.util.List;
 import java.util.Properties;
 
 /**
-* @ClassName: IdGenerator
-* @Description: 全局ID生产配置加载
-* @author eonh
-* @date 2017年12月27日 上午11:00:58
-*
-*/
+ * @author eonh
+ * @ClassName: IdGenerator
+ * @Description: 全局ID生产配置加载
+ * @date 2017年12月27日 上午11:00:58
+ */
 public final class IdGenerator {
-    
+
     static final Logger logger = LoggerFactory.getLogger(IdGenerator.class);
     /**
      * JedisPool, luaSha
@@ -34,26 +33,26 @@ public final class IdGenerator {
     List<Pair<JedisPool, String>> jedisPoolList;
     int retryTimes;
     int index = 0;
-    
+
     private IdGenerator() {
-        
+
     }
-    
+
     private IdGenerator(List<Pair<JedisPool, String>> jedisPoolList, int retryTimes) {
         this.jedisPoolList = jedisPoolList;
         this.retryTimes = retryTimes;
     }
-    
+
     static public IdGeneratorBuilder builder() {
         return new IdGeneratorBuilder();
     }
-    
+
     static class IdGeneratorBuilder {
-        
-        
+
+
         List<Pair<JedisPool, String>> jedisPoolList = new ArrayList<>();
         int retryTimes = 5;
-        
+
         public IdGeneratorBuilder addHost(String host, int port, String pass, String luaSha) {
             JedisPoolConfig config = new JedisPoolConfig();
             //最大空闲连接数, 应用自己评估，不要超过ApsaraDB for Redis每个实例最大的连接数
@@ -67,17 +66,17 @@ public final class IdGenerator {
             jedisPoolList.add(Pair.of(StringUtils.isEmpty(pass) ? new JedisPool(config, host, port, 1000) : new JedisPool(config, host, port, 1000, pass), luaSha));
             return this;
         }
-        
+
         public IdGeneratorBuilder retryTimes(int retryTimes) {
             this.retryTimes = retryTimes;
             return this;
         }
-        
+
         public IdGenerator build() {
             return new IdGenerator(jedisPoolList, retryTimes);
         }
     }
-    
+
     public long next(String tab) {
         for (int i = 0; i < retryTimes; ++i) {
             Long id = innerNext(tab);
@@ -87,7 +86,7 @@ public final class IdGenerator {
         }
         throw new RuntimeException("Can not generate id!");
     }
-    
+
     private Long innerNext(String tab) {
         Calendar cal = Calendar.getInstance();
         String year = String.valueOf(cal.get(Calendar.YEAR)).substring(2);
@@ -111,12 +110,13 @@ public final class IdGenerator {
             }
         }
     }
-    
-    
+
+
     static class LoadIdGeneratorConfig {
-        
+
         static List<RedisScriptConfig> scriptConf = new ArrayList<>();
         static LoadIdGeneratorConfig loadConfig = new LoadIdGeneratorConfig();
+
         static {
             Properties pro = new Properties();
             try {
@@ -124,7 +124,7 @@ public final class IdGenerator {
                 for (int i = 1; i <= 3; i++) {
                     String host = pro.getProperty("redis_cluster" + i + "_host");
                     String pass = pro.getProperty("redis_cluster" + i + "_pass");
-                    if(StringUtils.isEmpty(host)) {
+                    if (StringUtils.isEmpty(host)) {
                         continue;
                     }
                     scriptConf.add(new RedisScriptConfig(host, Integer.valueOf(pro.getProperty("redis_cluster" + i + "_port", "6379")), pass));
@@ -133,9 +133,9 @@ public final class IdGenerator {
                 e.printStackTrace();
             }
         }
-        
+
         public IdGenerator buildIdGenerator()
-            throws IOException {
+                throws IOException {
             loadConfig.loadScript();
             IdGeneratorBuilder idGenerator = IdGenerator.builder();
             for (RedisScriptConfig conf : scriptConf) {
@@ -143,14 +143,14 @@ public final class IdGenerator {
             }
             return idGenerator.build();
         }
-        
+
         public void loadScript()
-            throws IOException {
+                throws IOException {
             int index = 1;
             for (RedisScriptConfig conf : scriptConf) {
                 Jedis jedis = new Jedis(conf.getHost(), conf.getPort());
-                if(!StringUtils.isEmpty(conf.getPass())) {
-                	jedis.auth(conf.getPass());
+                if (!StringUtils.isEmpty(conf.getPass())) {
+                    jedis.auth(conf.getPass());
                 }
                 InputStream is = LoadIdGeneratorConfig.class.getResourceAsStream("/script/redis-script-node" + index++ + ".lua");
                 BufferedReader br = new BufferedReader(new InputStreamReader(is));
@@ -166,40 +166,40 @@ public final class IdGenerator {
             }
         }
     }
-    
+
     static class RedisScriptConfig {
-        
+
         private String host;
         private Integer port;
         private String pass;
         private String scriptSha;
-        
+
         public RedisScriptConfig(String host, Integer port, String pass) {
             super();
             this.host = host;
             this.port = port;
             this.pass = pass;
         }
-        
+
         public void setScriptSha(String scriptSha) {
             this.scriptSha = scriptSha;
         }
-        
+
         public String getHost() {
             return host;
         }
-        
+
         public Integer getPort() {
             return port;
         }
-        
+
         public String getPass() {
             return pass;
         }
-        
+
         public String getScriptSha() {
             return scriptSha;
         }
-        
+
     }
 }

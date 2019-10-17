@@ -23,10 +23,11 @@ public class WeChatController {
 
     /**
      * 获取token
+     *
      * @return
      */
     @PostMapping(value = "getTokenCode")
-    public ServiceResult getTokenCode(){
+    public ServiceResult getTokenCode() {
         ServiceResult serviceResult = new ServiceResult();
         serviceResult = userService.getTokenCode();
         return serviceResult;
@@ -34,6 +35,7 @@ public class WeChatController {
 
     /**
      * 获取二维码
+     *
      * @param userReq
      * @return
      * @throws IOException

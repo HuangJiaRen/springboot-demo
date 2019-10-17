@@ -14,11 +14,12 @@ import java.security.*;
 import java.security.spec.InvalidParameterSpecException;
 
 public class AesCbuUtil {
-	// 算法名
-	  public static final String KEY_NAME = "AES";
-	  // 加解密算法/模式/填充方式
-	  // ECB模式只用密钥即可对数据进行加密解密，CBC模式需要添加一个iv
-	  public static final String CIPHER_ALGORITHM = "AES/CBC/PKCS7Padding";
+    // 算法名
+    public static final String KEY_NAME = "AES";
+    // 加解密算法/模式/填充方式
+    // ECB模式只用密钥即可对数据进行加密解密，CBC模式需要添加一个iv
+    public static final String CIPHER_ALGORITHM = "AES/CBC/PKCS7Padding";
+
     static {
         //BouncyCastle是一个开源的加解密解决方案，主页在http://www.bouncycastle.org/
         Security.addProvider(new BouncyCastleProvider());
@@ -44,8 +45,7 @@ public class AesCbuUtil {
         //偏移量
         byte[] ivByte = Base64.decodeBase64(iv.getBytes());
 
-        
-        
+
         try {
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS7Padding");
 
@@ -61,10 +61,8 @@ public class AesCbuUtil {
                 String result = new String(resultByte, encodingFormat);
                 return result;
             }
-            
-            
-            
-            
+
+
             return null;
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();

@@ -7,5 +7,5 @@ import java.util.Map;
 
 @Mapper
 public interface UserMapper {
-    List<Map<String,Object>> listUsers();
+    List<Map<String, Object>> listUsers();
 }

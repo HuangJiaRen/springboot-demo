@@ -17,8 +17,9 @@ import java.util.List;
  * @date 2019-08-01 15:20
  */
 public interface UserService {
-     void saveUser(MongoUser user);
-     List<MongoUser> getUsers();
+    void saveUser(MongoUser user);
+
+    List<MongoUser> getUsers();
 
     ServiceResult getTokenCode();
 

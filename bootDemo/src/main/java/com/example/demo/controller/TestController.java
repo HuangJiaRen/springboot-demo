@@ -70,16 +70,16 @@ public class TestController {
     private UserService userService;
 
 
-    @ApiOperation(value="swagger第一个接口", notes="hello接口")
+    @ApiOperation(value = "swagger第一个接口", notes = "hello接口")
     @RequestMapping(value = "/hello", method = RequestMethod.POST)
-    public String hello(){
+    public String hello() {
         System.out.println(blogProperties.getTile());
         return "hello springboot!";
     }
 
-    @ApiOperation(value="整合mybatis", notes="整合mybatis")
-    @RequestMapping(value = "/db",method = RequestMethod.GET)
-    public List<Map<String,Object>> db(){
+    @ApiOperation(value = "整合mybatis", notes = "整合mybatis")
+    @RequestMapping(value = "/db", method = RequestMethod.GET)
+    public List<Map<String, Object>> db() {
         return userMapper.listUsers();
     }
 
@@ -87,7 +87,7 @@ public class TestController {
     @ApiOperation(value = "整合redis", notes = "整合redis")
     @RequestMapping(value = "/redis", method = RequestMethod.GET)
     public String reids() {
-        redisService.setString("my1","20171213");
+        redisService.setString("my1", "20171213");
         return redisService.getString("my1");
     }
 
@@ -104,8 +104,8 @@ public class TestController {
     @RequestMapping(value = "/addRedisList", method = RequestMethod.POST)
     public ServiceResult addsList() {
         ServiceResult serviceResult = new ServiceResult();
-        List userList = Arrays.asList(new User("张三",18,1)
-                ,new User("李四",20,1));
+        List userList = Arrays.asList(new User("张三", 18, 1)
+                , new User("李四", 20, 1));
         redisService.setList("listTest", userList);
 
         Jedis jedis = redisUtil.getJedis();
@@ -151,7 +151,7 @@ public class TestController {
         JedisPool jedisPool = new JedisPool("49.234.238.59");
         Jedis jedis = jedisPool.getResource();
         // 设定 nowatch 的初始值为 hello
-        jedis.set("watchtest","hello");
+        jedis.set("watchtest", "hello");
         // 使用 watch 命令watch "watchtest"
         jedis.watch("watchtest");
         //开启事务
@@ -169,21 +169,21 @@ public class TestController {
 
     @ApiOperation(value = "整合es-7.1.1", notes = "整合es-7.1.1")
     @GetMapping("/order/getById/{id}")
-    public Map<String,Object> getOrder(@PathVariable("id")String id){
-        GetRequest getRequest=new GetRequest("logs-client-2019.08.12","_doc",id);
-        Map map=new HashMap();
-        GetResponse response=null;
-        try{
-            response= restHighLevelClient.get(getRequest, RequestOptions.DEFAULT);
+    public Map<String, Object> getOrder(@PathVariable("id") String id) {
+        GetRequest getRequest = new GetRequest("logs-client-2019.08.12", "_doc", id);
+        Map map = new HashMap();
+        GetResponse response = null;
+        try {
+            response = restHighLevelClient.get(getRequest, RequestOptions.DEFAULT);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if(response.isExists()){
-            map.put("success",true);
-            map.put("data",response.getSource());
-        }else{
-            map.put("success",false);
+        if (response.isExists()) {
+            map.put("success", true);
+            map.put("data", response.getSource());
+        } else {
+            map.put("success", false);
         }
         return map;
 
@@ -222,8 +222,8 @@ public class TestController {
         //排序
         searchSourceBuilder.sort(SortBuilders.fieldSort("@timestamp").order(SortOrder.DESC));
 //        QueryBuilder queryBuilder = QueryBuilders.termQuery("id",req.getId());
-        if (StringUtils.isEmpty(req.getKeyWord())){
-            MatchPhraseQueryBuilder moreLikeThisQuery = QueryBuilders.matchPhraseQuery("message",req.getKeyWord());
+        if (StringUtils.isEmpty(req.getKeyWord())) {
+            MatchPhraseQueryBuilder moreLikeThisQuery = QueryBuilders.matchPhraseQuery("message", req.getKeyWord());
             boolQueryBuilder.must(moreLikeThisQuery);
         }
 //        RangeQueryBuilder rangeQueryBuilder = QueryBuilders.rangeQuery("timestamp");
@@ -235,13 +235,13 @@ public class TestController {
         SearchRequest searchRequest = new SearchRequest(req.getChatRoomIndex());
         searchRequest.routing(req.getChatRoomType());
         searchRequest.source(searchSourceBuilder);
-        SearchResponse response = restHighLevelClient.search(searchRequest,RequestOptions.DEFAULT);
+        SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
         SearchHits hits = response.getHits();
         SearchHit[] searchHits = hits.getHits();
         List<Object> list = new ArrayList<>();
-        if (searchHits.length > 0){
+        if (searchHits.length > 0) {
             for (SearchHit hit : searchHits) {
-                list.add(hit.getSourceAsMap()) ;
+                list.add(hit.getSourceAsMap());
             }
         }
 
@@ -254,19 +254,19 @@ public class TestController {
     @ApiOperation(value = "整合es-7.1.1的update方法", notes = "整合es-7.1.1的update方法")
     @PostMapping("/order/update/")
     public String update(ElasticsearchQuery req) throws IOException {
-        UpdateRequest request=new UpdateRequest(req.getChatRoomIndex(),req.getId());
-        Map<String,Object> temp=new HashMap<>();
-        if(!ObjectUtils.isEmpty(req.getKeyWord())){
-            temp.put("message",req.getKeyWord());
+        UpdateRequest request = new UpdateRequest(req.getChatRoomIndex(), req.getId());
+        Map<String, Object> temp = new HashMap<>();
+        if (!ObjectUtils.isEmpty(req.getKeyWord())) {
+            temp.put("message", req.getKeyWord());
         }
 
-        if(!ObjectUtils.isEmpty(req.getPath())){
-            temp.put("path",req.getPath());
+        if (!ObjectUtils.isEmpty(req.getPath())) {
+            temp.put("path", req.getPath());
         }
 
         request.doc(temp);
 
-        return restHighLevelClient.update(request,RequestOptions.DEFAULT).status().name();
+        return restHighLevelClient.update(request, RequestOptions.DEFAULT).status().name();
 
     }
 

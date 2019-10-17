@@ -12,5 +12,6 @@ import java.util.List;
  */
 public interface UserDao {
     void saveUser(MongoUser user);
+
     List<MongoUser> getUsers();
 }

@@ -20,7 +20,7 @@ public class RedisUtil {
     @Autowired
     private Redis redis;
 
-    public void read(){
+    public void read() {
         System.out.println(redis.getIp());
     }
 
@@ -48,7 +48,6 @@ public class RedisUtil {
 
     /**
      * 在多线程环境同步初始化
-     *
      */
     private synchronized void poolInit() {
 
@@ -64,7 +63,6 @@ public class RedisUtil {
      * 非切片客户端链接 同步获取非切片Jedis实例
      *
      * @return Jedis
-     *
      */
     @SuppressWarnings("deprecation")
     public synchronized Jedis getJedis() {

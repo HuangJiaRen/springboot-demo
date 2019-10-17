@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public ServiceResult getTokenCode() {
         ServiceResult serviceResult = new ServiceResult();
-        String url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid="+appid+"&secret="+appSecret;
+        String url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + appid + "&secret=" + appSecret;
 
         String json = restTemplate.getForObject(url, String.class);
         serviceResult.setData(json);

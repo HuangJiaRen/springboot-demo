@@ -12,7 +12,7 @@ public class Test {
             ids.add(id);
             System.out.println(id);
         }
-        System.out.println( "ids >>>>>>" + ids.size());
+        System.out.println("ids >>>>>>" + ids.size());
         System.err.println(System.currentTimeMillis() - current);
     }
 }

@@ -159,9 +159,10 @@ public class HttpClientConfig {
 
     /**
      * 配置长连接保持策略
+     *
      * @return
      */
-    public ConnectionKeepAliveStrategy connectionKeepAliveStrategy(){
+    public ConnectionKeepAliveStrategy connectionKeepAliveStrategy() {
         return (response, context) -> {
             // Honor 'keep-alive' header
             HeaderElementIterator it = new BasicHeaderElementIterator(
@@ -174,8 +175,8 @@ public class HttpClientConfig {
                 if (value != null && "timeout".equalsIgnoreCase(param)) {
                     try {
                         return Long.parseLong(value) * 1000;
-                    } catch(NumberFormatException ignore) {
-                        log.error("解析长连接过期时间异常",ignore);
+                    } catch (NumberFormatException ignore) {
+                        log.error("解析长连接过期时间异常", ignore);
                     }
                 }
             }
@@ -188,8 +189,6 @@ public class HttpClientConfig {
             return any.map(en -> en.getValue() * 1000L).orElse(httpClientPoolConfig.getKeepAliveTime() * 1000L);
         };
     }
-
-
 
 
     /**

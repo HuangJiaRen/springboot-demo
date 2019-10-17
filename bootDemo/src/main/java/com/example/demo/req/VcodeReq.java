@@ -14,6 +14,6 @@ public class VcodeReq {
     private String school;
     private String liveUrl;
     private String checkImgCode;
-   private String remoteUrl;
+    private String remoteUrl;
 
 }

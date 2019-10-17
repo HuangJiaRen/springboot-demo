@@ -21,11 +21,11 @@ public class HttpClientPoolConfig {
     /**
      * 连接池的最大连接数
      */
-    private int maxTotalConnect =3500;
+    private int maxTotalConnect = 3500;
     /**
      * 同路由的并发数
      */
-    private int maxConnectPerRoute=3500 ;
+    private int maxConnectPerRoute = 3500;
     /**
      * 客户端和服务器建立连接超时，默认2s
      */
@@ -47,7 +47,7 @@ public class HttpClientPoolConfig {
     /**
      * 针对不同的地址,特别设置不同的长连接保持时间
      */
-    private Map<String,Integer> keepAliveTargetHost;
+    private Map<String, Integer> keepAliveTargetHost;
     /**
      * 针对不同的地址,特别设置不同的长连接保持时间,单位 s
      */

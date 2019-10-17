@@ -10,10 +10,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * @version V1.0
  * @ClassName: RedisDaoImpl
  * @Description: TODO
  * @date 2017年10月19日 下午2:54:39
- * @version V1.0
  */
 @Service
 public class RedisServiceImpl implements RedisService {
@@ -21,11 +21,10 @@ public class RedisServiceImpl implements RedisService {
     @Autowired
     private RedisUtil redisUtil;
 
-    private static final String RETURN_OK="OK";
+    private static final String RETURN_OK = "OK";
 
 
     /**
-     *
      * @param key
      * @return
      */
@@ -60,7 +59,6 @@ public class RedisServiceImpl implements RedisService {
     }
 
     /**
-     *
      * @param key
      * @param param
      */
@@ -70,7 +68,7 @@ public class RedisServiceImpl implements RedisService {
         Jedis jedis = redisUtil.getJedis();
         String bKey = buildKey(key);
         String set = null;
-        System.out.println("jedis=============="+jedis);
+        System.out.println("jedis==============" + jedis);
         set = jedis.set(bKey.getBytes(), SerializeUtil.serialize(param));
         if (!set.isEmpty() && (RETURN_OK).equals(set)) {
             return true;
@@ -101,7 +99,6 @@ public class RedisServiceImpl implements RedisService {
     }
 
     /**
-     *
      * @param key
      * @param bean
      */
@@ -120,7 +117,6 @@ public class RedisServiceImpl implements RedisService {
     }
 
     /**
-     *
      * @param key
      * @return T
      */
@@ -158,7 +154,6 @@ public class RedisServiceImpl implements RedisService {
     }
 
     /**
-     *
      * @param key
      * @return list
      */
@@ -178,7 +173,6 @@ public class RedisServiceImpl implements RedisService {
     }
 
     /**
-     *
      * @param <T>
      * @param key
      */
@@ -197,7 +191,6 @@ public class RedisServiceImpl implements RedisService {
     }
 
     /**
-     *
      * @param key
      * @return Map
      */

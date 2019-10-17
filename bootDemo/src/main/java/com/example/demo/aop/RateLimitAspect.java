@@ -66,9 +66,9 @@ public class RateLimitAspect {
         String functionName = msig.getName(); // 注解所在方法名区分不同的限流策略
 
         //获取rateLimiter
-        if(map.containsKey(functionName)){
+        if (map.containsKey(functionName)) {
             rateLimiter = map.get(functionName);
-        }else {
+        } else {
             map.put(functionName, RateLimiter.create(limitNum));
             rateLimiter = map.get(functionName);
         }
@@ -88,6 +88,7 @@ public class RateLimitAspect {
         }
         return obj;
     }
+
     //将结果返回
     public void outErrorResult(String result) {
         response.setContentType("application/json;charset=UTF-8");
