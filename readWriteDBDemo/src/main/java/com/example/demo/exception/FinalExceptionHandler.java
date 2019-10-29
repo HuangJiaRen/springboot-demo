@@ -11,10 +11,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * @ClassName: FinalExceptionHandler
- * @Description: 在进入Controller之前，譬如请求一个不存在的地址，404错误。
  * @author huangli
  * @version V1.0
+ * @ClassName: FinalExceptionHandler
+ * @Description: 在进入Controller之前，譬如请求一个不存在的地址，404错误。
  */
 @RestController
 public class FinalExceptionHandler implements ErrorController {

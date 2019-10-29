@@ -26,9 +26,9 @@ public class SwaggerConfig {
                 Class<?> declaringClass = input.declaringClass();
                 if (declaringClass == BasicErrorController.class)// 排除
                     return false;
-                if(declaringClass.isAnnotationPresent(RestController.class)) // 被注解的类
+                if (declaringClass.isAnnotationPresent(RestController.class)) // 被注解的类
                     return true;
-                if(input.isAnnotatedWith(ResponseBody.class)) // 被注解的方法
+                if (input.isAnnotatedWith(ResponseBody.class)) // 被注解的方法
                     return true;
                 return false;
             }

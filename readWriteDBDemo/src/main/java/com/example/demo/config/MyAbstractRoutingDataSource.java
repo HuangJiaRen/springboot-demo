@@ -6,11 +6,11 @@ import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
-* @author huangli
-* @package:com.ganinfo.datasource
-* @className:MyAbstractRoutingDataSource
-* @description:多数据源切换
-**/
+ * @author huangli
+ * @package:com.ganinfo.datasource
+ * @className:MyAbstractRoutingDataSource
+ * @description:多数据源切换
+ **/
 
 public class MyAbstractRoutingDataSource extends AbstractRoutingDataSource {
 

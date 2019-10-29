@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ESReturn<T> {
-    private List<Map<String,Object>> esList;
+    private List<Map<String, Object>> esList;
 
     private Long total;
 

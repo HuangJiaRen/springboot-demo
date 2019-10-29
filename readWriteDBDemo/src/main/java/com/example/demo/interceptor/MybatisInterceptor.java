@@ -21,9 +21,9 @@ import java.util.Locale;
 import java.util.Properties;
 import java.util.regex.Matcher;
 
-@Intercepts({ @Signature(type = Executor.class, method = "update", args = { MappedStatement.class, Object.class }),
-        @Signature(type = Executor.class, method = "query", args = { MappedStatement.class, Object.class,
-                RowBounds.class, ResultHandler.class }) })
+@Intercepts({@Signature(type = Executor.class, method = "update", args = {MappedStatement.class, Object.class}),
+        @Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class,
+                RowBounds.class, ResultHandler.class})})
 public class MybatisInterceptor implements Interceptor {
 
     private Logger logger = Logger.getLogger(String.valueOf(MybatisInterceptor.class));
@@ -44,7 +44,7 @@ public class MybatisInterceptor implements Interceptor {
             Configuration configuration = mappedStatement.getConfiguration();
             String sql = getSql(configuration, boundSql, sqlId, 0);
             logger.info("*************");
-            logger.info("***"+sql);
+            logger.info("***" + sql);
             logger.info("*************");
         } catch (Exception e) {
             e.printStackTrace();

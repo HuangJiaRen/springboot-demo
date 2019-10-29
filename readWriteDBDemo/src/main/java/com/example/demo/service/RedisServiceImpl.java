@@ -11,10 +11,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * @version V1.0
  * @ClassName: RedisDaoImpl
  * @Description: TODO
  * @date 2017年10月19日 下午2:54:39
- * @version V1.0
  */
 @Service
 @Slf4j
@@ -23,11 +23,10 @@ public class RedisServiceImpl implements RedisService {
     @Autowired
     private RedisUtil redisUtil;
 
-    private static final String RETURN_OK="OK";
+    private static final String RETURN_OK = "OK";
 
 
     /**
-     *
      * @param key
      * @return
      */
@@ -62,7 +61,6 @@ public class RedisServiceImpl implements RedisService {
     }
 
     /**
-     *
      * @param key
      * @param param
      */
@@ -72,7 +70,7 @@ public class RedisServiceImpl implements RedisService {
         Jedis jedis = redisUtil.getJedis();
         String bKey = buildKey(key);
         String set = null;
-        System.out.println("jedis=============="+jedis);
+        System.out.println("jedis==============" + jedis);
         set = jedis.set(bKey.getBytes(), SerializeUtil.serialize(param));
         if (!set.isEmpty() && (RETURN_OK).equals(set)) {
             return true;
@@ -103,7 +101,6 @@ public class RedisServiceImpl implements RedisService {
     }
 
     /**
-     *
      * @param key
      * @param bean
      */
@@ -122,7 +119,6 @@ public class RedisServiceImpl implements RedisService {
     }
 
     /**
-     *
      * @param key
      * @return T
      */
@@ -160,7 +156,6 @@ public class RedisServiceImpl implements RedisService {
     }
 
     /**
-     *
      * @param key
      * @return list
      */
@@ -180,7 +175,6 @@ public class RedisServiceImpl implements RedisService {
     }
 
     /**
-     *
      * @param <T>
      * @param key
      */
@@ -199,7 +193,6 @@ public class RedisServiceImpl implements RedisService {
     }
 
     /**
-     *
      * @param key
      * @return Map
      */
@@ -360,10 +353,11 @@ public class RedisServiceImpl implements RedisService {
 
     /**
      * 对某个键的值自增
-     * @author huangli
-     * @param key 键
+     *
+     * @param key          键
      * @param cacheSeconds 超时时间，0为不超时
      * @return
+     * @author huangli
      */
     @Override
     public long setIncr(String key, int cacheSeconds) {
@@ -371,13 +365,13 @@ public class RedisServiceImpl implements RedisService {
         Jedis jedis = null;
         try {
             jedis = redisUtil.getJedis();
-            result =jedis.incr(key);
+            result = jedis.incr(key);
             if (cacheSeconds != 0) {
                 jedis.expire(key, cacheSeconds);
             }
-            log.debug("set "+ key + " = " + result);
+            log.debug("set " + key + " = " + result);
         } catch (Exception e) {
-            log.warn("set "+ key + " = " + result);
+            log.warn("set " + key + " = " + result);
         }
 
         return result;

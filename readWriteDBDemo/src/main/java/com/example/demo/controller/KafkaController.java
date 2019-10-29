@@ -25,10 +25,8 @@ public class KafkaController {
     /**
      * 发送消息的方法
      *
-     * @param key
-     *            推送数据的key
-     * @param data
-     *            推送数据的data
+     * @param key  推送数据的key
+     * @param data 推送数据的data
      */
     private void send(String key, String data) {
         // topic 名称 key data 消息数据

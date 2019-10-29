@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Scope;
 
 @Configuration
 @Slf4j
-@ComponentScan(basePackageClasses=ESClientSpringFactory.class)
+@ComponentScan(basePackageClasses = ESClientSpringFactory.class)
 public class EsConfig {
 
     @Value("${elasticSearch.host}")
@@ -29,25 +29,25 @@ public class EsConfig {
 
 
     @Bean
-    public HttpHost httpHost(){
-        return new HttpHost(host,port,"http");
+    public HttpHost httpHost() {
+        return new HttpHost(host, port, "http");
     }
 
-    @Bean(initMethod="init",destroyMethod="close")
-    public ESClientSpringFactory getFactory(){
+    @Bean(initMethod = "init", destroyMethod = "close")
+    public ESClientSpringFactory getFactory() {
         return ESClientSpringFactory.
                 build(httpHost(), connectNum, connectPerRoute);
     }
 
     @Bean
     @Scope("singleton")
-    public RestClient getRestClient(){
+    public RestClient getRestClient() {
         return getFactory().getClient();
     }
 
     @Bean
     @Scope("singleton")
-    public RestHighLevelClient getRHLClient(){
+    public RestHighLevelClient getRHLClient() {
         return getFactory().getRhlClient();
     }
 }

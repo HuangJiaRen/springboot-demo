@@ -8,16 +8,16 @@ import org.springframework.context.annotation.PropertySource;
 @PropertySource(value = "classpath:redis.properties")
 @ConfigurationProperties(prefix = "redis")
 public class Redis {
-    private  String ip;
-    private  Integer port;
-    private  String password;
-    private  Integer maxActive;
-    private  Integer maxIdle;
-    private  Long maxWait;
-    private  Boolean testOnBorrow;
-    private  Boolean testOnReturn;
-    private  Integer expire;
-    private  Integer maxTotal;
+    private String ip;
+    private Integer port;
+    private String password;
+    private Integer maxActive;
+    private Integer maxIdle;
+    private Long maxWait;
+    private Boolean testOnBorrow;
+    private Boolean testOnReturn;
+    private Integer expire;
+    private Integer maxTotal;
 
     public String getIp() {
         return ip;

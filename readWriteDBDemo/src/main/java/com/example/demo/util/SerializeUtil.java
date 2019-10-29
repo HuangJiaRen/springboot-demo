@@ -4,12 +4,13 @@ import java.io.*;
 
 /**
  * 序列化工具类
- * @author huangli
  *
+ * @author huangli
  */
 public class SerializeUtil {
     /**
      * 序列化
+     *
      * @param value
      * @return
      */
@@ -67,7 +68,9 @@ public class SerializeUtil {
 
     }
 
-    /**反序列化
+    /**
+     * 反序列化
+     *
      * @param bytes
      * @return
      */

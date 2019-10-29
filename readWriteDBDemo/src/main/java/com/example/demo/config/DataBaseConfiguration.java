@@ -13,10 +13,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * @author huangli
  * @package:com.ganinfo.config
  * @className:DataBaseConfiguration
  * @description:读取mybatis.properties配置文件
- * @author huangli
  **/
 
 @Configuration
@@ -26,21 +26,23 @@ public class DataBaseConfiguration {
     @Value("${spring.datasource.type}")
     private Class<? extends DataSource> dataSourceType;
 
-    @Bean(name="writeDataSource", destroyMethod = "close", initMethod="init")
+    @Bean(name = "writeDataSource", destroyMethod = "close", initMethod = "init")
     @Primary
     @ConfigurationProperties(prefix = "spring.datasource")
     public DataSource writeDataSource() {
         logger.info("-------------------- writeDataSource init ---------------------");
-        DataSource dataSource=DataSourceBuilder.create().type(dataSourceType).build();
+        DataSource dataSource = DataSourceBuilder.create().type(dataSourceType).build();
         return dataSource;
     }
+
     /**
      * 有多少个从库就要配置多少个
+     *
      * @return
      */
     @Bean(name = "readDataSource1")
     @ConfigurationProperties(prefix = "spring.slave")
-    public DataSource readDataSourceOne(){
+    public DataSource readDataSourceOne() {
         logger.info("-------------------- readDataSourceOne init --------------------");
         return DataSourceBuilder.create().type(dataSourceType).build();
     }
@@ -51,9 +53,10 @@ public class DataBaseConfiguration {
         logger.info("-------------------- readDataSourceTwo init --------------------");
         return DataSourceBuilder.create().type(dataSourceType).build();
     }
+
     @Bean("readDataSources")
-    public List<DataSource> readDataSources(){
-        List<DataSource> dataSources=new ArrayList<>();
+    public List<DataSource> readDataSources() {
+        List<DataSource> dataSources = new ArrayList<>();
         dataSources.add(readDataSourceOne());
         dataSources.add(readDataSourceTwo());
         return dataSources;

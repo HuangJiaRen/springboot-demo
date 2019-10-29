@@ -11,10 +11,10 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 /**
- * @ClassName: GlobalExceptionHandler
- * @Description: 在执行@RequestMapping时，进入逻辑处理阶段前。譬如传的参数类型错误
  * @author huangli
  * @version V1.0
+ * @ClassName: GlobalExceptionHandler
+ * @Description: 在执行@RequestMapping时，进入逻辑处理阶段前。譬如传的参数类型错误
  */
 @Slf4j
 @ControllerAdvice
@@ -25,7 +25,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
      */
     @Override
     protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        return new ResponseEntity<Object>(new ServiceResult(HttpResultEnum.ILLEGAL.getStatus(),HttpResultEnum.ILLEGAL.getMessage()), status);
+        return new ResponseEntity<Object>(new ServiceResult(HttpResultEnum.ILLEGAL.getStatus(), HttpResultEnum.ILLEGAL.getMessage()), status);
 
     }
 

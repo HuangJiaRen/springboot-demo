@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 @Configuration
 public class DruidConfig {
     private Logger logger = Logger.getLogger(String.valueOf(DruidConfig.class));
+
     /**
      * 注册一个StatViewServlet
      *
@@ -85,7 +86,7 @@ public class DruidConfig {
         druidDataSource.setUsername(username);
         druidDataSource.setPassword(password);
         druidDataSource.setMaxActive(maxActive);
-        logger.info( "DruidConfiguration.druidDataSource(),url=" + url + ",username=" + username + ",password=" + password);
+        logger.info("DruidConfiguration.druidDataSource(),url=" + url + ",username=" + username + ",password=" + password);
         try {
             druidDataSource.setFilters("stat, wall");
         } catch (SQLException e) {

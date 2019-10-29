@@ -4,9 +4,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * @version V1.0
  * @ClassName: RedisDao
  * @Description: redis接口
- * @version V1.0
  */
 public interface RedisService {
 
@@ -16,6 +16,7 @@ public interface RedisService {
 
     /**
      * 存储String
+     *
      * @param key
      * @param param
      */
@@ -23,6 +24,7 @@ public interface RedisService {
 
     /**
      * 获取Stringֵ
+     *
      * @param key
      * @return String
      */
@@ -30,6 +32,7 @@ public interface RedisService {
 
     /**
      * 存储实体类
+     *
      * @param key
      * @param bean
      */
@@ -37,6 +40,7 @@ public interface RedisService {
 
     /**
      * 获取实体类
+     *
      * @param key
      * @return T
      */
@@ -44,6 +48,7 @@ public interface RedisService {
 
     /**
      * 存储 list
+     *
      * @param key
      * @param list
      */
@@ -51,6 +56,7 @@ public interface RedisService {
 
     /**
      * 获取list
+     *
      * @param key
      * @return list
      */
@@ -58,6 +64,7 @@ public interface RedisService {
 
     /**
      * 存储 map
+     *
      * @param key
      * @param map
      */
@@ -65,6 +72,7 @@ public interface RedisService {
 
     /**
      * 获取map
+     *
      * @param key
      * @return Map
      */
@@ -75,6 +83,7 @@ public interface RedisService {
      * @return
      */
     public boolean del(String key);
+
     /**
      * @param key
      * @param num
@@ -97,19 +106,24 @@ public interface RedisService {
 
     /**
      * 非序列化存储
+     *
      * @param key
      * @param map
      * @return
      */
     public <T> boolean setHash(String key, Map<String, String> map);
 
-    /**获取key中所有的map的key值
+    /**
+     * 获取key中所有的map的key值
+     *
      * @param key
      * @return
      */
-    public  Map<String, String> getAllHash(String key);
+    public Map<String, String> getAllHash(String key);
 
-    /**获取key中的Map中的key=fields 的value集合
+    /**
+     * 获取key中的Map中的key=fields 的value集合
+     *
      * @param key
      * @param fields
      * @return
@@ -118,12 +132,12 @@ public interface RedisService {
 
 
     /**
-     * @Title: login
-     * @Description: TODO
-     * @param  userId
-     * @param  second
+     * @param userId
+     * @param second
      * @return String 返回token
      * @throws
+     * @Title: login
+     * @Description: TODO
      */
     public String login(String userId, int second);
 
