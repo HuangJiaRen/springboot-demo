@@ -7,6 +7,8 @@ import com.huangli.wechat.req.WebchatUserReq;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -16,6 +18,8 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author huangli
@@ -80,6 +84,23 @@ public class UserServiceImpl implements UserService {
 
         log.info(pre + encode);
         serviceResult.setData(pre + encode);
+
+        return serviceResult;
+    }
+
+    @Override
+    public ServiceResult sendMsg(WebchatUserReq req) {
+        ServiceResult serviceResult = new ServiceResult();
+        String url = "https://api.weixin.qq.com/cgi-bin/message/subscribe/send?access_token="+accessToken;
+
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("access_token", req.getAccessToken());
+        params.put("touser", req.getTouser());
+        params.put("template_id", req.getTemplateId());
+        params.put("page", req.getPage());
+        params.put("data", req.getData());
+        ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, req, String.class);
+        serviceResult.setData(responseEntity);
 
         return serviceResult;
     }

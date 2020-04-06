@@ -50,4 +50,18 @@ public class TestController {
     public ServiceResult getQRToken(WebchatUserReq req) throws IOException {
         return userService.getQRCode(req);
     }
+
+    @ApiOperation(value = "sendMsg", notes = "发送订阅消息")
+    @RequestMapping(value = "/sendMsg", method = RequestMethod.POST)
+    public ServiceResult sendMsg(WebchatUserReq req) throws IOException {
+        return userService.sendMsg(req);
+    }
+
+    @RequestMapping(value = "/jvmCpu", method = RequestMethod.GET)
+    public String jvmCpu(){
+        while (true){
+
+        }
+
+    }
 }

@@ -15,4 +15,8 @@ public class WebchatUserReq {
     String accessToken;
     String path;
     Integer width;
+    String touser;
+    String templateId;
+    String page;
+    String data;
 }

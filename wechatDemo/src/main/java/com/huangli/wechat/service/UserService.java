@@ -14,4 +14,5 @@ public interface UserService {
 
     ServiceResult getQRCode(WebchatUserReq req) throws IOException;
 
+    ServiceResult sendMsg(WebchatUserReq req);
 }
