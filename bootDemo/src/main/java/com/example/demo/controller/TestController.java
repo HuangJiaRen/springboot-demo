@@ -6,7 +6,6 @@ import com.example.demo.bean.MongoUser;
 import com.example.demo.bean.User;
 import com.example.demo.common.ServiceResult;
 import com.example.demo.config.BussinessConstants;
-import com.example.demo.config.EsConfig;
 import com.example.demo.mapper.UserMapper;
 import com.example.demo.mgservice.UserService;
 import com.example.demo.pojo.ElasticsearchQuery;
