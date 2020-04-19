@@ -1,7 +1,6 @@
 package com.example.demo.study.factory.simple;
 
 import com.example.demo.study.factory.Car;
-import com.example.demo.study.factory.simple.SimpleFactory;
 
 /**
  * @author huangli
@@ -12,6 +11,6 @@ import com.example.demo.study.factory.simple.SimpleFactory;
 public class SimpleFactoryTest {
     public static void main(String[] args) {
         Car car = new SimpleFactory().getCar("audi");
-        System.out.println(car.getCar());
+        System.out.println(car.getName());
     }
 }

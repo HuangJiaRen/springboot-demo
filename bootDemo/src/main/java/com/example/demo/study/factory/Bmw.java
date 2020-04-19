@@ -8,7 +8,7 @@ package com.example.demo.study.factory;
  */
 public class Bmw implements Car {
     @Override
-    public String getCar() {
+    public String getName() {
         return "Bmw";
     }
 }
