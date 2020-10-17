@@ -2,13 +2,20 @@ package com.huangli.wechat.controller;
 
 import com.huangli.wechat.BlogProperties;
 import com.huangli.wechat.common.ServiceResult;
+import com.huangli.wechat.config.QRCodeUtil2;
+import com.huangli.wechat.config.QrCodeUtil;
 import com.huangli.wechat.mapper.UserMapper;
 import com.huangli.wechat.req.WebchatUserReq;
+import com.huangli.wechat.service.TestRetryService;
 import com.huangli.wechat.service.UserService;
+import com.sun.org.glassfish.gmbal.ParameterNames;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +30,9 @@ public class TestController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private TestRetryService testRetryService;
 
     @ApiOperation(value = "swagger第一个接口", notes = "hello接口")
     @RequestMapping(value = "/hello", method = RequestMethod.POST)
@@ -63,5 +73,29 @@ public class TestController {
 
         }
 
+    }
+
+    @RequestMapping("/qrcode")
+      public void qrcode(HttpServletRequest request, HttpServletResponse response) {
+                 try {
+//                         String  path= ResourceUtils.getURL("classpath:").getPath()+"logo/logo.png";
+                     String codeCreate = QRCodeUtil2.zxingCodeCreate("https://www.cnblogs.com/xikui/", "", 300, "");
+                     System.out.println(codeCreate);
+                 } catch (Exception e) {
+                         e.printStackTrace();
+                     }
+             }
+
+
+    /**
+     * 获取图形验证码
+     *
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/testRetryService", method = RequestMethod.POST)
+    public ServiceResult TestRetryService() throws Exception {
+        int dignifiedTest = testRetryService.dignifiedTest(0);
+        return new ServiceResult();
     }
 }
