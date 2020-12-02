@@ -11,6 +11,7 @@ import com.example.demo.mgservice.UserService;
 import com.example.demo.pojo.ElasticsearchQuery;
 import com.example.demo.req.VcodeReq;
 import com.example.demo.service.RedisService;
+import com.example.demo.service.TestRetryService;
 import com.example.demo.util.RedisUtil;
 import io.swagger.annotations.ApiOperation;
 import org.elasticsearch.action.delete.DeleteRequest;
@@ -67,6 +68,9 @@ public class TestController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private TestRetryService testRetryService;
 
 
     @ApiOperation(value = "swagger第一个接口", notes = "hello接口")
@@ -293,5 +297,19 @@ public class TestController {
     @ResponseBody
     public ServiceResult getImgCode(@RequestBody VcodeReq vcodeReq, HttpServletRequest req, HttpServletResponse resp) throws Exception {
         return userService.getImgCode(vcodeReq, req, resp);
+    }
+
+
+    /**
+     * 获取图形验证码
+     *
+     * @return
+     * @throws Exception
+     */
+    @PostMapping(value = "/getImgCode")
+    @ResponseBody
+    public ServiceResult TestRetryService() throws Exception {
+        testRetryService.dignifiedTest(0);
+        return new ServiceResult();
     }
 }
